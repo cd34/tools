@@ -1,0 +1,22 @@
+apatrace.sh - put this in a directory, it will run strace on each of the
+              apache processes so you can track down performance issues
+
+initial_import.sh - script to do an initial import to gitosis.
+
+ipvhmake.py - makes Apache VirtualHost containers for the IPs configured on
+              a machine.
+
+loaddel.py - delete files that match a pattern while being conscious of the
+             load average.
+
+mvexploit.sh - move exploit found on machine to protected directory for later
+               analysis
+
+removejs.py - recursive search and replace on modified files
+
+sqlclean.pl - kill long-running mysql threads
+
+wpu.sh - Upgrade Wordpress from the command line
+
+benchmarks/xfstest.sh - exhaustive test of a number of XFS mkfs and mount 
+                        options

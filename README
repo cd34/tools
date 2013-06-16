@@ -20,3 +20,6 @@ wpu.sh - Upgrade Wordpress from the command line
 
 benchmarks/xfstest.sh - exhaustive test of a number of XFS mkfs and mount 
                         options
+
+kvm - a few shell scripts used while converting machines from dedicated machines
+      to KVM

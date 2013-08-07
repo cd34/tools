@@ -12,6 +12,11 @@ loaddel.py - delete files that match a pattern while being conscious of the
 mvexploit.sh - move exploit found on machine to protected directory for later
                analysis
 
+mysql-parse.py - parse mysql.log or mysql-slow.log and sort by decreasing order
+                 of popularity. Replaces numbers/text in quotes with XXX and
+                 'XXX' to generalize the data. Not a finished product, but
+                 it works.
+
 removejs.py - recursive search and replace on modified files
 
 sqlclean.pl - kill long-running mysql threads

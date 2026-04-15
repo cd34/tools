@@ -2,7 +2,7 @@
 # initial gitosis update so I could import 50 repos without having
 # to retype
 
-DIR=`pwd`
+DIR=$(pwd)
 PACKAGE=${DIR##*/}
 
 git init

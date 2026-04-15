@@ -1,15 +1,15 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import operator
 import re
 import sys
 
-slow_re = re.compile('^(SELECT|DELETE)')
-mysql_re = re.compile('Query')
-query_search = re.compile('(Quit|Connect|Query|Init DB)')
-slow_query_clean_1_re = re.compile('\d+')
-slow_query_clean_2_re = re.compile('([\'"]).+?([\'"])')
-query_clean_1_re = re.compile('^\t+\d+\ Query\t')
+slow_re = re.compile(r'^(SELECT|DELETE)')
+mysql_re = re.compile(r'Query')
+query_search = re.compile(r'(Quit|Connect|Query|Init DB)')
+slow_query_clean_1_re = re.compile(r'\d+')
+slow_query_clean_2_re = re.compile(r'([\'"]).+?([\'"])')
+query_clean_1_re = re.compile(r'^\t+\d+\ Query\t')
 
 def add_query(line, counts):
     query = line.replace('  ',' ')
@@ -50,29 +50,29 @@ def process_log(filename):
     in_slow = False
     in_mysql = False
     counts = {}
-    f = open(filename, 'r')
-    for line in f:
-        if slow_re.search(line) and not in_slow:
-            in_slow = True
-            query = line.strip()
-        elif in_slow and line.startswith('#'):
-            in_slow = False
-            counts = add_query(query, counts)
-            process_slow_query_log(counts, f)
-        elif in_slow:
-            query += ' ' + line.strip()
-        if mysql_re.search(line) and not in_mysql:
-            in_mysql = True
-            query = line.strip()
-        elif in_mysql and re.search('^(\d+)?.*\d+.(Quit|Connect|Query|Init DB)', line):
-            in_mysql = False
-            counts = add_query(query, counts)
-            process_query_log(counts, f)
-        elif in_mysql:
-            query += ' ' + line.strip()
+    with open(filename, 'r') as f:
+        for line in f:
+            if slow_re.search(line) and not in_slow:
+                in_slow = True
+                query = line.strip()
+            elif in_slow and line.startswith('#'):
+                in_slow = False
+                counts = add_query(query, counts)
+                process_slow_query_log(counts, f)
+            elif in_slow:
+                query += ' ' + line.strip()
+            if mysql_re.search(line) and not in_mysql:
+                in_mysql = True
+                query = line.strip()
+            elif in_mysql and re.search(r'^(\d+)?.*\d+.(Quit|Connect|Query|Init DB)', line):
+                in_mysql = False
+                counts = add_query(query, counts)
+                process_query_log(counts, f)
+            elif in_mysql:
+                query += ' ' + line.strip()
     return counts
 
 counts = process_log(sys.argv[1])
 vk_query = sorted(counts.items(), key=operator.itemgetter(1), reverse=True)
 for q in vk_query:
-    print q[1],q[0]
+    print(q[1], q[0])

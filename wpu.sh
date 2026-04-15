@@ -18,29 +18,28 @@ WORDPRESS_TMPDIR=/var/tmp/wordpress
 # PATH_PART_LOCATION should be 3   [0]/var[1]/www[2]/domain.com[3].
 PATH_PART_LOCATION=3
 
-if [ "X" == "$1X" ];
-then
+if [ -z "$1" ]; then
   echo "Needs a pathname for the version.php file"
   echo
   echo "$0 /var/www/domain.com/wp-includes/version.php"
   echo
-  echo "You can include data after version.php, i.e. :$version from find command"
+  echo "You can include data after version.php, i.e. :\$version from find command"
 else
-  WP_INCLUDE_PATH=$1
-  WP_PATH=${WP_INCLUDE_PATH%%/wp-includes/version.php*}
+  WP_INCLUDE_PATH="$1"
+  WP_PATH="${WP_INCLUDE_PATH%%/wp-includes/version.php*}"
   IFS='/' read -ra PATHPARTS <<< "$WP_PATH"
-  D=${PATHPARTS[@]:$PATH_PART_LOCATION}
+  D="${PATHPARTS[@]:$PATH_PART_LOCATION}"
   DOMAIN="${D// //}"
 
-  TMP=`stat $WP_PATH|grep Uid:`
-  TMP_GID=${TMP##*Gid: ( }
-  TMP_GID=${TMP_GID/ /}
-  DGID=${TMP_GID%%/*}
-  TMP_UID=${TMP##*Uid: ( }
-  DUID=${TMP_UID%%/*}
+  TMP=$(stat "$WP_PATH" | grep Uid:)
+  TMP_GID="${TMP##*Gid: ( }"
+  TMP_GID="${TMP_GID/ /}"
+  DGID="${TMP_GID%%/*}"
+  TMP_UID="${TMP##*Uid: ( }"
+  DUID="${TMP_UID%%/*}"
 
-  `cp -Rp $WORDPRESS_TMPDIR/* $WP_PATH`
-  `chown -R --from=root $DUID.$DGID $WP_PATH`
-  `/usr/bin/wget -q -O /dev/null "http://$DOMAIN/wp-admin/upgrade.php?step=1"`
+  cp -Rp "$WORDPRESS_TMPDIR"/* "$WP_PATH"
+  chown -R --from=root "$DUID.$DGID" "$WP_PATH"
+  /usr/bin/wget -q -O /dev/null "http://$DOMAIN/wp-admin/upgrade.php?step=1"
   echo "Upgraded: http://$DOMAIN"
 fi

@@ -1,11 +1,11 @@
 #!/bin/bash
 
-/usr/bin/killall -9 apache2
+/usr/sbin/apache2ctl graceful-stop
 /usr/sbin/apache2ctl start
 
 sleep 5
-PSLIST=`ps ax|grep apache|cut -c -5|sed 's/ //g'`
+PSLIST=$(ps ax | grep apache | grep -v grep | awk '{print $1}')
 
 for h in $PSLIST; do
-  nohup strace -p $h 2> /var/tmp/trace/trace.$h &
+  nohup strace -p "$h" 2> "/var/tmp/trace/trace.$h" &
 done

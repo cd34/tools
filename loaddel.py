@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """
 
 max_load = load throttle, reads one minute average
@@ -13,7 +13,7 @@ import time
 
 path = '.'
 max_load = 50
-file_match = re.compile('\.(php|txt)$', re.IGNORECASE);
+file_match = re.compile(r'\.(php|txt)$', re.IGNORECASE)
 iteration_count = 500
 
 def check_load():
@@ -25,9 +25,9 @@ def check_load():
 def getdir(path):
     files = os.listdir(path)
     numfiles = len(files)
-    for loop,file in enumerate(files):
+    for loop, file in enumerate(files):
         if loop % iteration_count == 0:
-            print '%d of %d (%d%%)' % (loop, numfiles, loop*100/numfiles)
+            print(f'{loop} of {numfiles} ({loop * 100 // numfiles}%)')
             check_load()
         if file_match.search(file):
             os.unlink(file)
